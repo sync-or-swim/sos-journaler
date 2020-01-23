@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from argparse import ArgumentParser
 
+import dateutil.parser
+
 
 def main():
     parser = ArgumentParser(
@@ -23,10 +25,11 @@ def main():
             flight_number = flight_identification.attrib[
                 "aircraftIdentification"]
             timestamp_str = flight.attrib["timestamp"]
+            timestamp = dateutil.parser.parse(timestamp_str)
 
             print(f"Center: {center}\n"
                   f"Flight Number: {flight_number}\n"
-                  f"Timestamp: {timestamp_str}")
+                  f"Timestamp: {timestamp}")
 
             en_route = flight.find("enRoute")
             if en_route is None:
