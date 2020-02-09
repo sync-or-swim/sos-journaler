@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  rabbitmq:
+    image: rabbitmq:3
+  sos-journaler:
+    image: sync-or-swim/sos-journaler
+    command: >-
+      --rabbitmq-queue-name "fixm"
+      --rabbitmq-host "rabbitmq"
+    restart: unless-stopped
+  sos-swim-consumer:
+    image: sync-or-swim/sos-swim-consumer
+    command: >-
+      --swim-broker-url "tcps://ems2.swim.faa.gov:55443"
+      --swim-queue ${SWIM_QUEUE}
+      --swim-connection-factory ${SWIM_CONNECTION_FACTORY}
+      --swim-vpn "FDPS"
+      --rabbitmq-host "rabbitmq"
+      --rabbitmq-queue-name "fixm"
+    environment:
+      - SWIM_USERNAME=${SWIM_USERNAME}
+      - SWIM_PASSWORD=${SWIM_PASSWORD}
+    restart: unless-stopped
