@@ -12,8 +12,8 @@ services:
     image: sync-or-swim/sos-swim-consumer
     command: >-
       --swim-broker-url "tcps://ems2.swim.faa.gov:55443"
-      --swim-queue "xaviosx.gmail.com.FDPS.d10fdb36-40e9-4e7e-9881-57949c04112e.OUT"
-      --swim-connection-factory "xaviosx.gmail.com.CF"
+      --swim-queue ${SWIM_QUEUE}
+      --swim-connection-factory ${SWIM_CONNECTION_FACTORY}
       --swim-vpn "FDPS"
       --rabbitmq-host "rabbitmq"
       --rabbitmq-queue-name "fixm"
