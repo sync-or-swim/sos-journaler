@@ -2,6 +2,7 @@ import logging
 from argparse import ArgumentParser
 from time import sleep
 import os
+import pyfixm as fixm
 
 import pika.exceptions
 
@@ -10,7 +11,14 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 def on_fixm_message(channel, method, properties, body):
-    logger.info(f"Got a FIXM message from the queue")
+    message_collection = fixm.parseString(body, silence=True)
+
+    logger.info(f"Got a FIXM message collection from the queue: "
+                f"{message_collection}")
+    for message in message_collection.message:
+        if isinstance(message, fixm.FlightMessageType):
+            flight = message.flight
+            logger.info(f"Got a flight message from center: {flight.centre}")
 
 
 def main():
