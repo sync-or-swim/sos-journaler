@@ -1,10 +1,10 @@
 import logging
+import os
 from argparse import ArgumentParser
 from time import sleep
-import os
-import pyfixm as fixm
 
 import pika.exceptions
+import pyfixm as fixm
 
 logger = logging.getLogger("sos-journaler")
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
