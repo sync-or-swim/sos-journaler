@@ -1,12 +1,22 @@
 version: "3.7"
 services:
   rabbitmq:
-    image: rabbitmq:3
+    image: rabbitmq:3-alpine
+  influxdb:
+    image: influxdb:1.7-alpine
+    environment:
+      - INFLUXDB_DB=fixm
+      - INFLUXDB_USER=user
+      - INFLUXDB_USER_PASSWORD=password
   sos-journaler:
     image: sync-or-swim/sos-journaler
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_QUEUE_NAME=fixm
+      - INFLUXDB_HOSTNAME=influxdb
+      - INFLUXDB_DATABASE=fixm
+      - INFLUXDB_USERNAME=user
+      - INFLUXDB_PASSWORD=password
     restart: unless-stopped
   sos-swim-consumer:
     image: sync-or-swim/sos-swim-consumer

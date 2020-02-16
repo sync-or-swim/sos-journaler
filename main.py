@@ -1,23 +1,11 @@
-import logging
-import os
 from time import sleep
 
 import pika.exceptions
-import pyfixm as fixm
+from influxdb import InfluxDBClient
 
 import config
 from log import logger
-
-
-def on_fixm_message(channel, method, properties, body):
-    message_collection = fixm.parseString(body, silence=True)
-
-    logger.info(f"Got a FIXM message collection from the queue: "
-                f"{message_collection}")
-    for message in message_collection.message:
-        if isinstance(message, fixm.FlightMessageType):
-            flight = message.flight
-            logger.info(f"Got a flight message from center: {flight.centre}")
+from message_handling import FIXMMessageHandler
 
 
 def main():
@@ -39,10 +27,18 @@ def main():
     # Create the queue if it doesn't already exist
     channel.queue_declare(queue=config.rabbitmq_queue_name)
 
+    # Connect to InfluxDB
+    db = InfluxDBClient(config.influxdb_hostname, config.influxdb_port,
+                        config.influxdb_username, config.influxdb_password,
+                        config.influxdb_database)
+    # Create the database if it doesn't already exist
+    db.create_database(config.influxdb_database)
+
     # Read FIXM data from the queue
+    handler = FIXMMessageHandler(db)
     channel.basic_consume(queue=config.rabbitmq_queue_name,
                           auto_ack=True,
-                          on_message_callback=on_fixm_message)
+                          on_message_callback=handler.on_message)
     channel.start_consuming()
 
 
