@@ -8,4 +8,4 @@ COPY Pipfile* ./
 RUN pipenv install --deploy --system --ignore-pipfile
 COPY . .
 
-ENTRYPOINT ["python", "main.py"]
+CMD ["python", "main.py"]

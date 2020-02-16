@@ -4,9 +4,9 @@ services:
     image: rabbitmq:3
   sos-journaler:
     image: sync-or-swim/sos-journaler
-    command: >-
-      --rabbitmq-queue-name "fixm"
-      --rabbitmq-host "rabbitmq"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_QUEUE_NAME=fixm
     restart: unless-stopped
   sos-swim-consumer:
     image: sync-or-swim/sos-swim-consumer
