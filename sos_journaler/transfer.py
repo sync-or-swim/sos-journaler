@@ -5,11 +5,11 @@ import pyfixm as fixm
 class FIXMPoint:
     """Holds FIXM data formatted to be written to InfluxDB."""
 
-    def __init__(self, measurement, time):
+    def __init__(self, measurement: str, time: str):
         """
         :param measurement: Which measurement (table in SQL terms) this should
             be saved to
-        :param time: The time this data took place at
+        :param time: The time this data took place at, in ISO 8601 format
         """
         self.measurement = measurement
         self.time = time
@@ -34,14 +34,15 @@ class FIXMPoint:
             if not isinstance(val, (str, float, int)):
                 raise ValueError(f"Item {name} is of invalid type {type(val)}")
 
-    def _set_arrival(self, obj):
+    def _set_arrival(self, obj: fixm.NasArrivalType):
         self.fields["arrival.point"] = obj.arrivalPoint
         if obj.runwayPositionAndTime is not None:
             self._set_runway_position_and_time(
                 obj=obj.runwayPositionAndTime,
                 name="arrival")
 
-    def _set_runway_position_and_time(self, obj, name):
+    def _set_runway_position_and_time(
+            self, obj: fixm.RunwayPositionAndTimeType, name: str):
         if obj.runwayTime.actual is not None:
             self.fields[f"{name}.type"] = "actual"
             self.fields[f"{name}.time"] = \
@@ -51,14 +52,15 @@ class FIXMPoint:
             self.fields[f"{name}.time"] = \
                 obj.runwayTime.estimated.time.isoformat()
 
-    def _set_flight_identification(self, obj):
+    def _set_flight_identification(
+            self, obj: fixm.NasFlightIdentificationType):
         self.fields["flightIdentification.computerId"] = obj.computerId
         self.fields["flightIdentification.siteSpecificPlanId"] = \
             obj.siteSpecificPlanId
         self.fields["flightIdentification.aircraftIdentification"] = \
             obj.aircraftIdentification
 
-    def _set_supplemental_data(self, obj):
+    def _set_supplemental_data(self, obj: fixm.NasSupplementalDataType):
         namespace = "supplementalData.additionalFlightInformation"
 
         for name_value in obj.additionalFlightInformation.nameValue:
@@ -72,8 +74,8 @@ class FIXMPoint:
 class HPPoint(FIXMPoint):
     """Converts a FIXM message from the HP source to an InfluxDB point."""
 
-    def __init__(self, message):
-        flight = message.flight
+    def __init__(self, message: fixm.FlightMessageType):
+        flight: fixm.NasFlightType = message.flight
         super().__init__(measurement="HP", time=flight.timestamp.isoformat())
 
         self.tags["centre"] = flight.centre
@@ -99,7 +101,7 @@ class HPPoint(FIXMPoint):
 
         self.check_types()
 
-    def _set_coordination(self, obj):
+    def _set_coordination(self, obj: fixm.NasCoordinationType):
         self.fields["coordination.coordinationTime"] = \
             obj.coordinationTime.isoformat()
         self.fields["coordination.coordinationTimeHandling"] = \
@@ -117,8 +119,8 @@ class HPPoint(FIXMPoint):
 class THPoint(FIXMPoint):
     """Converts a FIXM message from the TH source to an InfluxDB point."""
 
-    def __init__(self, message):
-        flight = message.flight
+    def __init__(self, message: fixm.FlightMessageType):
+        flight: fixm.NasFlightType = message.flight
         super().__init__(measurement="TH", time=flight.timestamp.isoformat())
 
         self.tags["centre"] = flight.centre
@@ -166,7 +168,7 @@ class THPoint(FIXMPoint):
 
         self.check_types()
 
-    def _set_en_route(self, obj):
+    def _set_en_route(self, obj: fixm.NasEnRouteType):
         latitude = float(obj.position.position.location.pos[0])
         longitude = float(obj.position.position.location.pos[1])
         ghash = geohash.encode(latitude, longitude, precision=4)
