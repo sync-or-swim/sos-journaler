@@ -1,7 +1,7 @@
 import pyfixm as fixm
 from influxdb import InfluxDBClient
 
-import transfer
+from .transfer import HPPoint, THPoint
 
 
 class FIXMMessageHandler:
@@ -16,8 +16,8 @@ class FIXMMessageHandler:
         for message in message_collection.message:
             if isinstance(message, fixm.FlightMessageType):
                 if message.flight.source == "HP":
-                    point = transfer.hp_message(message)
+                    point = HPPoint(message)
                     self._db.write_points([point.to_dict()])
                 elif message.flight.source == "TH":
-                    point = transfer.th_message(message)
+                    point = THPoint(message)
                     self._db.write_points([point.to_dict()])

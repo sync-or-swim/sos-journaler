@@ -3,9 +3,7 @@ from time import sleep
 import pika.exceptions
 from influxdb import InfluxDBClient
 
-import config
-from log import logger
-from message_handling import FIXMMessageHandler
+from sos_journaler import config, logger, FIXMMessageHandler
 
 
 def main():

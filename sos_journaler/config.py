@@ -2,7 +2,7 @@ import os
 import sys
 from typing import Type
 
-from log import logger
+from .log import logger
 
 
 def _from_env(name: str, type_: Type = str, default=None) -> str:
@@ -28,11 +28,11 @@ influxdb_hostname = _from_env("INFLUXDB_HOSTNAME")
 influxdb_port = _from_env("INFLUXDB_PORT", type_=int, default=8086)
 """The port to connect to InfluxDB on"""
 
-influxdb_database = _from_env("INFLUXDB_DATABASE")
+influxdb_database = _from_env("INFLUXDB_DB")
 """The database to write FIXM data to"""
 
-influxdb_username = _from_env("INFLUXDB_USERNAME")
+influxdb_username = _from_env("INFLUXDB_USER")
 """The username to log into InfluxDB with"""
 
-influxdb_password = _from_env("INFLUXDB_PASSWORD")
+influxdb_password = _from_env("INFLUXDB_USER_PASSWORD")
 """The password to log into InfluxDB with"""

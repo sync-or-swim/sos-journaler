@@ -14,9 +14,9 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_QUEUE_NAME=fixm
       - INFLUXDB_HOSTNAME=influxdb
-      - INFLUXDB_DATABASE=fixm
-      - INFLUXDB_USERNAME=user
-      - INFLUXDB_PASSWORD=password
+      - INFLUXDB_DB=fixm
+      - INFLUXDB_USER=user
+      - INFLUXDB_USER_PASSWORD=password
     restart: unless-stopped
   sos-swim-consumer:
     image: sync-or-swim/sos-swim-consumer
