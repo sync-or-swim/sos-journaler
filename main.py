@@ -1,13 +1,12 @@
 import logging
 import os
-from argparse import ArgumentParser
 from time import sleep
 
 import pika.exceptions
 import pyfixm as fixm
 
-logger = logging.getLogger("sos-journaler")
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+import config
+from log import logger
 
 
 def on_fixm_message(channel, method, properties, body):
@@ -22,9 +21,7 @@ def on_fixm_message(channel, method, properties, body):
 
 
 def main():
-    args = get_arguments()
-
-    connection_params = pika.ConnectionParameters(host=args.rabbitmq_host)
+    connection_params = pika.ConnectionParameters(host=config.rabbitmq_host)
 
     # Connect to RabbitMQ with a retry mechanism
     connection = None
@@ -40,27 +37,13 @@ def main():
     channel = connection.channel()
 
     # Create the queue if it doesn't already exist
-    channel.queue_declare(queue=args.rabbitmq_queue_name)
+    channel.queue_declare(queue=config.rabbitmq_queue_name)
 
     # Read FIXM data from the queue
-    channel.basic_consume(queue=args.rabbitmq_queue_name,
+    channel.basic_consume(queue=config.rabbitmq_queue_name,
                           auto_ack=True,
                           on_message_callback=on_fixm_message)
     channel.start_consuming()
-
-
-def get_arguments():
-    parser = ArgumentParser(
-        description="Writes FIXM data from a RabbitMQ queue to an InfluxDB "
-                    "database")
-
-    parser.add_argument("--rabbitmq-host", type=str, required=True,
-                        help="The hostname of the RabbitMQ server")
-    parser.add_argument("--rabbitmq-queue-name", type=str, required=True,
-                        help="The name of the RabbitMQ queue to read FIXM "
-                             "data from")
-
-    return parser.parse_args()
 
 
 if __name__ == "__main__":
