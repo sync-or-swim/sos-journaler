@@ -137,7 +137,9 @@ class THPoint(FIXMPoint):
                 flight.controllingUnit.sectorIdentifier
 
         if flight.departure is not None:
-            self.fields["departure.point"] = flight.departure.departurePoint
+            if flight.departure.departurePoint is not None:
+                self.fields["departure.point"] = \
+                    flight.departure.departurePoint
             if flight.departure.runwayPositionAndTime is not None:
                 self._set_runway_position_and_time(
                     obj=flight.departure.runwayPositionAndTime,
