@@ -21,10 +21,10 @@ services:
   sos-swim-consumer:
     image: syncorswim/sos-swim-consumer
     environment:
-      - SWIM_BROKER_URL=tcps://ems2.swim.faa.gov:55443
-      - SWIM_VPN=FDPS
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_QUEUE_NAME=fixm
+      - SWIM_BROKER_URL
+      - SWIM_VPN
       - SWIM_CONNECTION_FACTORY
       - SWIM_QUEUE
       - SWIM_USERNAME
