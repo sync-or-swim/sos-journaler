@@ -20,13 +20,6 @@ services:
     restart: unless-stopped
   sos-swim-consumer:
     image: syncorswim/sos-swim-consumer
-    command: >-
-      --swim-broker-url "tcps://ems2.swim.faa.gov:55443"
-      --swim-queue ${SWIM_QUEUE}
-      --swim-connection-factory ${SWIM_CONNECTION_FACTORY}
-      --swim-vpn "FDPS"
-      --rabbitmq-host "rabbitmq"
-      --rabbitmq-queue-name "fixm"
     environment:
       - SWIM_BROKER_URL=tcps://ems2.swim.faa.gov:55443
       - SWIM_VPN=FDPS
