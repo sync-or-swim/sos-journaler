@@ -11,6 +11,8 @@ Configuration
 You must set a few environment variables before running the SOS Journaler so
 that it can access SWIM on your behalf.
 
+- ``SWIM_BROKER_URL``: The URL to access the SWIM message broker at
+- ``SWIM_VPN``: The VPN to connect to SWIM on
 - ``SWIM_CONNECTION_FACTORY``: The name of the SWIM connection factory
 - ``SWIM_QUEUE``: The name of the SWIM message queue to get FIXM data from
 - ``SWIM_USERNAME``: The username to log into SWIM with
@@ -25,6 +27,8 @@ with a ``docker-compose.override.yml``.
    services:
      sos-swim-consumer:
        environment:
+         - SWIM_BROKER_URL=tcps://ems2.swim.faa.gov:55443
+         - SWIM_VPN=FDPS
          - SWIM_CONNECTION_FACTORY=jondoe.hotmail.com.CF
          - SWIM_QUEUE=jondoe.hotmail.com.FDPS.0a2ce3a4-50f9-4a23-bd32-a7359c028c70.OUT
          - SWIM_USERNAME=jondoe.hotmail.com
