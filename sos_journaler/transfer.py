@@ -15,7 +15,7 @@ def message_to_point(message: ET.Element) -> dict:
     """
     fields = {}
 
-    def add_to_output(prefix, value):
+    def add_to_output(prefix: str, value: str) -> None:
         name = ".".join(prefix)
 
         if name in fields:
@@ -23,7 +23,7 @@ def message_to_point(message: ET.Element) -> dict:
 
         fields[name] = value
 
-    def add_item(item: ET.Element, prefix: List[str]):
+    def add_item(item: ET.Element, prefix: List[str]) -> None:
         # Remove the namespace from the tag name
         item.tag = _NAMESPACE_PATTERN.sub("", item.tag)
 
@@ -40,7 +40,7 @@ def message_to_point(message: ET.Element) -> dict:
         # Add a number to any children with duplicate names
         for child in item:
             if child.tag in children:
-                duplicate_count = 0
+                duplicate_count = 1
                 while child.tag + str(duplicate_count) in children:
                     duplicate_count += 1
                 child.tag += str(duplicate_count)
