@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "sos-journaler"
+version = "0.1.0"
+description = "A service that writes FIXM data to InfluxDB"
+authors = ["Tyler Compton <xaviosx@gmail.com>", "Bryce Beagle <bryce.beagle@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+python-dateutil = "^2.8.1"
+influxdb = "^5.3.0"
+python-geohash = "^0.8.5"
+pika = "^1.1.0"
+pyfixm = "^0.1.2"
+lxml = "^4.6.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
