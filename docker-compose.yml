@@ -29,7 +29,7 @@ services:
       - INFLUXDB_USER_PASSWORD=password
     restart: unless-stopped
     build: ./
-  sos-swim-consumer
+  sos-swim-consumer:
     image: syncorswim/sos-swim-consumer
     environment:
       - RABBITMQ_HOST=rabbitmq
