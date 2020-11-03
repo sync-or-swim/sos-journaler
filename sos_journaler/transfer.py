@@ -3,9 +3,8 @@ import re
 from typing import List
 
 import geohash
-import pyfixm as fixm
 
-_NAMESPACE_PATTERN = re.compile(r"\{.*\}")
+_NAMESPACE_PATTERN = re.compile(r"{.*}")
 """Matches to XML namespaces as they are formatted by the ElementTree parser"""
 
 
@@ -57,7 +56,7 @@ def message_to_point(message: ET.Element) -> dict:
     add_item(message, [])
 
     return {
-        "measurements": fields["flight.source"],
+        "measurement": fields["flight.source"],
         "tags": tags,
         "time": fields["flight.timestamp"],
         "fields": fields,
