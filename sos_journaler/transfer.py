@@ -41,7 +41,7 @@ def message_to_point(message: ET.Element) -> dict:
         for child in item:
             if child.tag in children:
                 duplicate_count = 1
-                while child.tag + str(duplicate_count) in children:
+                while f"{child.tag}{duplicate_count}" in children:
                     duplicate_count += 1
                 child.tag += str(duplicate_count)
 
