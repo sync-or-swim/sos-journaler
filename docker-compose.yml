@@ -13,7 +13,7 @@ services:
   chronograf:
     image: chronograf:1.7-alpine
     ports:
-      - "8888:8888"
+      - 8888:8888
     environment:
       - INFLUXDB_URL=http://influxdb:8086
       - INFLUXDB_USERNAME=user
