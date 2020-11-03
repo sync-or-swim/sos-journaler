@@ -15,7 +15,7 @@ def message_to_point(message: ET.Element) -> dict:
     """
     fields = {}
 
-    def add_to_output(prefix: str, value: str) -> None:
+    def add_to_output(prefix: List[str], value: str) -> None:
         name = ".".join(prefix)
 
         if name in fields:
