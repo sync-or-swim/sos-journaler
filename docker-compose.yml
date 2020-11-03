@@ -8,6 +8,16 @@ services:
       - INFLUXDB_DB=fixm
       - INFLUXDB_USER=user
       - INFLUXDB_USER_PASSWORD=password
+    ports:
+      - 8086:8086
+  chronograf:
+    image: chronograf:1.7-alpine
+    ports:
+      - "8888:8888"
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=user
+      - INFLUXDB_PASSWORD=password
   sos-journaler:
     image: syncorswim/sos-journaler
     environment:
@@ -18,7 +28,8 @@ services:
       - INFLUXDB_USER=user
       - INFLUXDB_USER_PASSWORD=password
     restart: unless-stopped
-  sos-swim-consumer:
+    build: ./
+  sos-swim-consumer
     image: syncorswim/sos-swim-consumer
     environment:
       - RABBITMQ_HOST=rabbitmq
