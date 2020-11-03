@@ -13,7 +13,6 @@ def message_to_point(message: ET.Element) -> dict:
     :param message: A single FIXM message from a MessageCollection
     :return: An InfluxDB point
     """
-    tags = {}
     fields = {}
 
     def add_to_output(prefix, value):
@@ -57,7 +56,7 @@ def message_to_point(message: ET.Element) -> dict:
 
     point = {
         "measurement": fields["flight.source"],
-        "tags": tags,
+        "tags": {},
         "time": fields["flight.timestamp"],
         "fields": fields,
     }
