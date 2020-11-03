@@ -22,7 +22,7 @@ def _hook(message_type: str) -> Callable[[Callable], Callable]:
 
 
 @_hook("TH")
-def add_(point: dict):
+def add_geohash(point: dict):
     prefix = "flight.enRoute.position.position.location"
 
     latitude_longitude = point["fields"][f"{prefix}.pos"].split(" ")
