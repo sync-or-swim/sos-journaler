@@ -33,3 +33,10 @@ def add_geohash(point: dict):
 
     point["tags"]["geohash"] = geohash.encode(
         latitude, longitude, precision=4)
+
+
+@_hook("TH")
+def add_aircraft_id_hook(point: dict):
+    field = "flight.flightIdentification.aircraftIdentification"
+
+    point["tags"]["aircraftIdentification"] = point["fields"][field]
