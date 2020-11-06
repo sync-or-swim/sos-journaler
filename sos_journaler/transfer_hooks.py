@@ -1,5 +1,5 @@
-from typing import Callable, Dict, List
 from collections import defaultdict
+from typing import Callable, Dict, List
 
 import geohash
 
@@ -41,3 +41,10 @@ def altitude_to_float(point: dict):
     field_name = "flight.enRoute.position.altitude"
     if field_name in point["fields"]:
         point["fields"][field_name] = float(point["fields"][field_name])
+
+
+@_hook("TH")
+def add_aircraft_id_hook(point: dict):
+    field = "flight.flightIdentification.aircraftIdentification"
+
+    point["tags"]["aircraftIdentification"] = point["fields"][field]
