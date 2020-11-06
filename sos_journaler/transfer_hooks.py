@@ -1,5 +1,5 @@
-from typing import Callable, Dict, List
 from collections import defaultdict
+from typing import Callable, Dict, List
 
 import geohash
 
@@ -31,8 +31,16 @@ def add_geohash(point: dict):
     point["fields"]["latitude"] = latitude
     point["fields"]["longitude"] = longitude
 
-    point["tags"]["geohash"] = geohash.encode(
-        latitude, longitude, precision=4)
+    ghash = geohash.encode(latitude, longitude, precision=4)
+    point["tags"]["geohash"] = ghash
+    point["fields"]["geohash"] = ghash
+
+
+@_hook("TH")
+def altitude_to_float(point: dict):
+    field_name = "flight.enRoute.position.altitude"
+    if field_name in point["fields"]:
+        point["fields"][field_name] = float(point["fields"][field_name])
 
 
 @_hook("TH")
