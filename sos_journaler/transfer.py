@@ -45,13 +45,13 @@ def message_to_point(message: ET.Element) -> dict:
                     duplicate_count += 1
                 child.tag += str(duplicate_count)
 
-            children[child.tag] = child
+            tag = _NAMESPACE_PATTERN.sub("", child.tag)
+            children[tag] = child
 
         # Recursively add all children of the tag
         for name, child in children.items():
             add_item(child, prefix + [name])
 
-    message.tag = _NAMESPACE_PATTERN.sub("", message.tag)
     add_item(message, [])
 
     point = {
