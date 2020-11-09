@@ -1,9 +1,9 @@
 from time import sleep
 
 import pika.exceptions
-from influxdb import InfluxDBClient
 
 from sos_journaler import config, logger, FIXMMessageHandler
+from sos_journaler.database import FIXMDatabase
 
 
 def main():
@@ -25,12 +25,8 @@ def main():
     # Create the queue if it doesn't already exist
     channel.queue_declare(queue=config.rabbitmq_queue_name)
 
-    # Connect to InfluxDB
-    db = InfluxDBClient(config.influxdb_hostname, config.influxdb_port,
-                        config.influxdb_username, config.influxdb_password,
-                        config.influxdb_database)
-    # Create the database if it doesn't already exist
-    db.create_database(config.influxdb_database)
+    # Connect to database
+    db = FIXMDatabase()
 
     # Read FIXM data from the queue
     handler = FIXMMessageHandler(db)
