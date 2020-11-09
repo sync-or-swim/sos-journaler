@@ -36,3 +36,6 @@ influxdb_username = _from_env("INFLUXDB_USER")
 
 influxdb_password = _from_env("INFLUXDB_USER_PASSWORD")
 """The password to log into InfluxDB with"""
+
+influxdb_retention_duration = _from_env("INFLUXDB_RETENTION_DURATION")
+"""The length of time to keep data for"""
