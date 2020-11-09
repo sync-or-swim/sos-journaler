@@ -1,7 +1,8 @@
-import pyfixm as fixm
+import xml.etree.ElementTree as ET
+
 from influxdb import InfluxDBClient
 
-from .transfer import HPPoint, THPoint
+from .transfer import message_to_point
 
 
 class FIXMMessageHandler:
@@ -11,13 +12,8 @@ class FIXMMessageHandler:
         self._db = db
 
     def on_message(self, _channel, _method, _properties, body):
-        message_collection = fixm.parseString(body, silence=True)
+        message_collection = ET.fromstring(body)
 
-        for message in message_collection.message:
-            if isinstance(message, fixm.FlightMessageType):
-                if message.flight.source == "HP":
-                    point = HPPoint(message)
-                    self._db.write_points([point.to_dict()])
-                elif message.flight.source == "TH":
-                    point = THPoint(message)
-                    self._db.write_points([point.to_dict()])
+        for message in message_collection:
+            point = message_to_point(message)
+            self._db.write_points([point])
