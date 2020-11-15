@@ -12,6 +12,7 @@ influxdb = "^5.3.0"
 pika = "^1.1.0"
 lxml = "^4.6.1"
 python-geohash = "^0.8.5"
+geopy = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 
