@@ -87,15 +87,9 @@ def get_distance(aircraft1: dict, aircraft2: dict) -> float:
     :param aircraft2: TH message for the second aircraft
     :return: The distance between the aircraft in miles
     """
-    aircraft1_location = (
-        aircraft1["latitude"],
-        aircraft1["longitude"])
-    aircraft2_location = (
-        aircraft2["latitude"],
-        aircraft2["longitude"])
-    distance = geodesic(
-        aircraft1_location,
-        aircraft2_location).miles
+    aircraft1_location = aircraft1["latitude"], aircraft1["longitude"]
+    aircraft2_location = aircraft2["latitude"], aircraft2["longitude"]
+    distance = geodesic(aircraft1_location, aircraft2_location).miles
 
     return distance
 
