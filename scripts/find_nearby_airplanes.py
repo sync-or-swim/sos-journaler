@@ -46,20 +46,22 @@ def main():
     for ghash in ghashes:
         # Start the query by getting location and identification data from
         # TH records
-        query = ("SELECT latitude, longitude, aircraftIdentification "
-                 "FROM fixm.autogen.TH WHERE (")
+        query = (
+            "SELECT latitude, longitude, aircraftIdentification "
+            "FROM fixm.autogen.TH WHERE ({geohash_conditions}) "
+            "AND time > now() - {duration}"
+        )
 
         # Narrow the query down to select only aircraft that are in this
         # geohash and all immediately adjacent geohashes
         nearby_ghashes = geohash.neighbors(ghash) + [ghash]
-        for i, nearby in enumerate(nearby_ghashes):
-            query += f"geohash = '{nearby}'"
-            if i < len(nearby_ghashes) - 1:
-                query += " OR "
+        geohash_conditions = " OR ".join(
+            f"geohash = '{n}'" for n in nearby_ghashes)
 
-        # Further narrow the query to only include records during the supplied
-        # duration
-        query += f") AND time > now() - {args.duration} "
+        query = query.format(
+            geohash_conditions=geohash_conditions,
+            duration=args.duration,
+        )
 
         # Get the query results
         result = client.query(query)
