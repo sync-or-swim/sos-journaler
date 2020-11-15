@@ -41,7 +41,7 @@ def main():
     result = client.query(f"SELECT geohash FROM fixm.autogen.TH "
                           f"WHERE time > now() - {args.duration}")
     result = result.get_points("TH")
-    ghashes = set(r["geohash"] for r in result)
+    ghashes = {r["geohash"] for r in result}
 
     for ghash in ghashes:
         # Start the query by getting location and identification data from
@@ -89,15 +89,9 @@ def get_distance(aircraft1: dict, aircraft2: dict) -> float:
     :param aircraft2: TH message for the second aircraft
     :return: The distance between the aircraft in miles
     """
-    aircraft1_location = (
-        aircraft1["latitude"],
-        aircraft1["longitude"])
-    aircraft2_location = (
-        aircraft2["latitude"],
-        aircraft2["longitude"])
-    distance = geodesic(
-        aircraft1_location,
-        aircraft2_location).miles
+    aircraft1_location = aircraft1["latitude"], aircraft1["longitude"]
+    aircraft2_location = aircraft2["latitude"], aircraft2["longitude"]
+    distance = geodesic(aircraft1_location, aircraft2_location).miles
 
     return distance
 
