@@ -81,8 +81,12 @@ def main():
                           f"{distance} miles apart")
 
 
-def get_distance(aircraft1, aircraft2) -> float:
-    # Find the distance between the two aircraft
+def get_distance(aircraft1: dict, aircraft2: dict) -> float:
+    """
+    :param aircraft1: TH message for the first aircraft
+    :param aircraft2: TH message for the second aircraft
+    :return: The distance between the aircraft in miles
+    """
     aircraft1_location = (
         aircraft1["latitude"],
         aircraft1["longitude"])
@@ -96,7 +100,13 @@ def get_distance(aircraft1, aircraft2) -> float:
     return distance
 
 
-def get_time_difference(aircraft1, aircraft2) -> float:
+def get_time_difference(aircraft1: dict, aircraft2: dict) -> float:
+    """
+    :param aircraft1: TH message for the first aircraft
+    :param aircraft2: TH message for the second aircraft
+    :return: The difference in reporting time between the two messages, in
+        seconds
+    """
     time1 = datetime.strptime(aircraft1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
     time2 = datetime.strptime(aircraft2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
 
