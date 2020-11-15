@@ -41,7 +41,7 @@ def main():
     result = client.query(f"SELECT geohash FROM fixm.autogen.TH "
                           f"WHERE time > now() - {args.duration}")
     result = result.get_points("TH")
-    ghashes = set(r["geohash"] for r in result)
+    ghashes = {r["geohash"] for r in result}
 
     for ghash in ghashes:
         # Start the query by getting location and identification data from
