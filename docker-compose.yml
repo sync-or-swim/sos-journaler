@@ -30,6 +30,7 @@ services:
       - INFLUXDB_USER=user
       - INFLUXDB_USER_PASSWORD=password
       - INFLUXDB_RETENTION_DURATION=1d
+      - MESSAGE_HANDLER_THREADS=1
     restart: unless-stopped
     build: ./
   sos-swim-consumer:
