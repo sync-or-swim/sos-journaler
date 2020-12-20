@@ -1,4 +1,6 @@
+import signal
 from time import sleep
+from typing import Callable
 
 import pika.exceptions
 
@@ -33,7 +35,17 @@ def main():
     channel.basic_consume(queue=config.rabbitmq_queue_name,
                           auto_ack=True,
                           on_message_callback=handler.on_message)
+
+    # Close gracefully on Docker exit
+    setup_graceful_exit(handler.close)
+
     channel.start_consuming()
+
+
+def setup_graceful_exit(exit_func: Callable) -> None:
+    """Connect graceful shutdown"""
+    signal.signal(signal.SIGINT, lambda *_args: exit_func())
+    signal.signal(signal.SIGTERM, lambda *_args: exit_func())
 
 
 if __name__ == "__main__":

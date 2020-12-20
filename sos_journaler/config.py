@@ -39,3 +39,8 @@ influxdb_password = _from_env("INFLUXDB_USER_PASSWORD")
 
 influxdb_retention_duration = _from_env("INFLUXDB_RETENTION_DURATION")
 """The length of time to keep data for"""
+
+message_handler_threads = _from_env("MESSAGE_HANDLER_THREADS",
+                                    type_=int,
+                                    default=1)
+"""The number of threads to process messages on"""
